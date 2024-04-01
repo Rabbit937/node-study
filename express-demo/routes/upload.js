@@ -6,7 +6,10 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
     destination(req, file, cb) {
-        const dir = '/uploads'
+        const dir = './uploads'
+
+        console.log(fs.existsSync(dir))
+
 
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true })
@@ -24,5 +27,24 @@ const upload = multer({
     storage,
     limits: {
         fileSize: 1024 * 1024 * 5
+    },
+    fileFilter(req, file, cb) {
+
+        console.log(file)
+        console.log(file.mimetype)
+
+        if (!file.mimetype.startsWith('image/')) {
+            const err = new Error('Only image files are allowed!');
+            err.status = 400
+            return cb(err, false)
+        }
+
+        return cb(null, true)
     }
 })
+
+router.post('/upload/image', upload.single('file'), (req, res) => {
+    res.json({ message: '文件上传成功', data: req.file })
+})
+
+export default router;

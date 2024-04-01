@@ -3,6 +3,7 @@ import responseRouter from './response.js'
 import demoRouter from './router-demo.js'
 import mountMethodDemo from './method.js'
 import restfulRouter from './restful.js'
+import uploadRouter from './upload.js'
 
 // const routers = [headerRouter, responseRouter, demoRouter]
 
@@ -10,6 +11,8 @@ export default function mountRouters(app) {
     mountMethodDemo(app);
 
     // app.use(routers)
+
+    app.use(uploadRouter)
 
     app.use('/demo', demoRouter)
 
